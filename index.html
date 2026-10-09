@@ -6,7 +6,6 @@
   <meta name="theme-color" content="#0284c7">
   <title>Selim Kültür Evi - Lokanta Otomasyonu</title>
 
-  <!-- FIREBASE CANLI VERİ TABANI KÜTÜPHANELERİ -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
@@ -25,24 +24,25 @@
       --text-main: #1e293b;
       --text-muted: #64748b;
       --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
-      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
       --radius-lg: 16px;
       --radius-md: 12px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
-    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding-bottom: calc(85px + var(--safe-bottom)); overflow-x: hidden; }
+    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding-bottom: 85px; }
 
     header { background: var(--glass-bg); backdrop-filter: blur(14px); border-bottom: 1px solid var(--glass-border); padding: 14px 20px 10px 20px; display: flex; flex-direction: column; gap: 10px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
     .header-top-bar { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; }
     .brand-title { font-weight: 800; font-size: 1.4rem; color: var(--primary-dark); }
-    .cloud-badge { background: rgba(22, 163, 74, 0.15); border: 1px solid rgba(22, 163, 74, 0.3); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; color: var(--success); }
+    
+    .cloud-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+    .cloud-badge.online { background: rgba(22, 163, 74, 0.15); border: 1px solid rgba(22, 163, 74, 0.4); color: var(--success); }
+    .cloud-badge.offline { background: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.4); color: var(--danger); }
 
-    .user-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(2, 132, 199, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+    .user-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(2, 132, 199, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; margin-top: 4px; }
     
     nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%; padding-top: 8px; border-top: 1px dashed var(--glass-border); }
-    .nav-btn { background: var(--glass-card); border: 1px solid var(--glass-border); color: var(--text-main); padding: 8px 14px; font-weight: 600; font-size: 0.85rem; border-radius: var(--radius-md); cursor: pointer; transition: 0.2s; }
+    .nav-btn { background: var(--glass-card); border: 1px solid var(--glass-border); color: var(--text-main); padding: 8px 14px; font-weight: 600; font-size: 0.85rem; border-radius: var(--radius-md); cursor: pointer; }
     .nav-btn.active, .nav-btn:hover { background: var(--primary); color: white; }
     .nav-btn.logout-btn { background: rgba(220, 38, 38, 0.1); color: var(--danger); border-color: rgba(220, 38, 38, 0.3); margin-left: auto; }
 
@@ -55,10 +55,10 @@
     .btn-success { background: var(--success); color: white; }
     .btn-danger { background: var(--danger); color: white; }
 
-    input, select { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 15px; width: 100%; margin-bottom: 10px; background: rgba(255, 255, 255, 0.95); outline: none; }
+    input, select { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 15px; width: 100%; margin-bottom: 10px; background: #fff; outline: none; }
 
     .tables-floor { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-    .table-pod { background: var(--glass-card); border-radius: var(--radius-lg); border: 1px solid var(--glass-border); padding: 12px 8px; text-align: center; cursor: pointer; aspect-ratio: 1 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+    .table-pod { background: var(--glass-card); border-radius: var(--radius-lg); border: 1px solid var(--glass-border); padding: 12px 8px; text-align: center; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); }
     .table-pod.occupied { background: rgba(254, 242, 242, 0.95); border-color: rgba(252, 165, 165, 0.8); }
 
     .kitchen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
@@ -76,9 +76,9 @@
     .modal-header { padding: 12px 16px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; }
     .modal-body { display: flex; flex: 1; overflow-y: auto; padding: 12px; gap: 12px; }
 
-    @media (max-width: 768px) {
-      .modal-body { flex-direction: column; }
-    }
+    .sync-footer { position: fixed; bottom: 12px; right: 12px; background: rgba(15, 23, 42, 0.85); color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; z-index: 99; }
+    .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+    .sync-dot.syncing { background: #f59e0b; }
   </style>
 </head>
 <body>
@@ -86,16 +86,17 @@
   <header>
     <div class="header-top-bar">
       <div>
-        <div class="brand-title" id="headerRestaurantName">Selim Kültür Evi</div>
+        <div class="brand-title">Selim Kültür Evi</div>
         <div class="user-badge">👤 Giriş Yapan: <strong id="activeUserName">Giriş Yapılmadı</strong></div>
       </div>
-      <div class="cloud-badge">🌐 GitHub Bulut Canlı</div>
+      <div id="cloudConnectionBadge" class="cloud-badge offline">
+        <span id="cloudStatusText">⏳ Bağlanıyor...</span>
+      </div>
     </div>
     <nav id="mainNav"></nav>
   </header>
 
   <div class="container">
-    <!-- 1. MASALAR -->
     <div id="masalarTab" class="tab-content active">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h2>Masa Düzeni</h2>
@@ -107,13 +108,11 @@
       <div class="tables-floor" id="tablesGrid"></div>
     </div>
 
-    <!-- 2. MUTFAK -->
     <div id="mutfakTab" class="tab-content">
       <h2>👨‍🍳 Mutfak Sipariş Ekranı</h2>
       <div class="kitchen-grid" id="kitchenGrid" style="margin-top:12px;"></div>
     </div>
 
-    <!-- 3. KASA -->
     <div id="kasaTab" class="tab-content">
       <div class="admin-grid">
         <div class="admin-card">
@@ -130,24 +129,22 @@
       </div>
     </div>
 
-    <!-- 4. MENÜ -->
     <div id="menuTab" class="tab-content">
       <div class="admin-card" style="max-width:600px; margin:0 auto;">
         <h3>Menü Yönetimi</h3>
         <form onsubmit="saveMenuItem(event)" style="display:flex; gap:8px; margin-top:10px;">
           <input type="text" id="menuItemName" placeholder="Ürün Adı" required>
-          <input type="number" id="menuItemPrice" placeholder="Fiyat" required style="width:100px;">
+          <input type="number" step="0.01" id="menuItemPrice" placeholder="Fiyat" required style="width:100px;">
           <button type="submit" class="btn btn-success">Ekle</button>
         </form>
         <table style="margin-top:15px;">
-          <thead><tr><th>Ürün</th><th>Fiyat</th></tr></thead>
+          <thead><tr><th>Ürün</th><th>Fiyat</th><th>İşlem</th></tr></thead>
           <tbody id="menuTableBody"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- SİPARİŞ MODALI -->
   <div class="modal" id="orderModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -166,26 +163,30 @@
             <tbody id="modalOrderTableBody"></tbody>
           </table>
           <h3 style="text-align:right; margin-top:10px;">Toplam: <span id="modalTotalAmount">0.00</span> TL</h3>
-          <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="sendOrderToKitchen()">Mutfağa Gönder</button>
+          <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="closeOrderModal()">Kapat / Kaydet</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- GİRİŞ MODALI -->
   <div class="modal active" id="loginModal">
     <div class="modal-content" style="max-width:350px; padding:20px;">
       <h3>🔑 Sistem Girişi</h3>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Kullanıcı: admin | Şifre: 123</p>
       <form onsubmit="handleLogin(event)" style="margin-top:15px;">
-        <input type="text" id="loginUsername" placeholder="Kullanıcı Adı (admin)" required>
-        <input type="password" id="loginPassword" placeholder="Şifre (123)" required>
+        <input type="text" id="loginUsername" placeholder="Kullanıcı Adı" required value="admin">
+        <input type="password" id="loginPassword" placeholder="Şifre" required value="123">
         <button type="submit" class="btn btn-primary" style="width:100%;">Giriş Yap</button>
       </form>
     </div>
   </div>
 
+  <div class="sync-footer">
+    <div class="sync-dot" id="syncDot"></div>
+    <span id="syncText">Buluta Bağlandı</span>
+  </div>
+
   <script>
-    // FIREBASE BULUT YAPILANDIRMASI
     const firebaseConfig = {
       authDomain: "selimkulturevi-547cd.firebaseapp.com",
       databaseURL: "https://selimkulturevi-547cd-default-rtdb.firebaseio.com",
@@ -197,39 +198,49 @@
     firebase.initializeApp(firebaseConfig);
     const cloudDb = firebase.database();
 
-    let cloudData = { tables: {}, menu: {}, active_orders: {}, sales: {}, personnel: {} };
+    let cloudData = { tables: {1:{id:1, name:"Masa 1"}, 2:{id:2, name:"Masa 2"}}, menu: {}, active_orders: {}, sales: {} };
     let activeUser = null;
     let activeTableId = null;
 
-    function startCloudListeners() {
-      cloudDb.ref('/').on('value', (snapshot) => {
-        const val = snapshot.val() || {};
-        cloudData.tables = val.tables || {};
-        cloudData.menu = val.menu || {};
-        cloudData.active_orders = val.active_orders || {};
-        cloudData.sales = val.sales || {};
-        cloudData.personnel = val.personnel || {};
+    // Bağlantı Kontrolü ve Otomatik Veri Senkronizasyonu
+    cloudDb.ref(".info/connected").on("value", (snap) => {
+      const badge = document.getElementById("cloudConnectionBadge");
+      const text = document.getElementById("cloudStatusText");
+      if (snap.val() === true) {
+        badge.className = "cloud-badge online";
+        text.innerHTML = "🌐 Buluta Bağlı";
+      } else {
+        badge.className = "cloud-badge offline";
+        text.innerHTML = "⚠️ Çevrimdışı (Yerel)";
+      }
+    });
 
-        if (Object.keys(cloudData.personnel).length === 0) {
-          cloudDb.ref('personnel/1').set({ id: 1, name: "Yönetici", username: "admin", password: "123" });
-        }
-        if (Object.keys(cloudData.tables).length === 0) {
-          cloudDb.ref('tables/1').set({ id: 1, name: "Masa 1" });
-          cloudDb.ref('tables/2').set({ id: 2, name: "Masa 2" });
-        }
-        renderAll();
-      });
+    cloudDb.ref('/').on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        if (val.tables) cloudData.tables = val.tables;
+        if (val.menu) cloudData.menu = val.menu;
+        if (val.active_orders) cloudData.active_orders = val.active_orders;
+        if (val.sales) cloudData.sales = val.sales;
+      }
+      renderAll();
+    });
+
+    function saveToCloud(path, data) {
+      cloudDb.ref(path).set(data);
     }
 
     function renderNav() {
       const nav = document.getElementById('mainNav');
       nav.innerHTML = '';
       if (!activeUser) return;
-      nav.innerHTML += `<button class="nav-btn active" onclick="switchTab('masalarTab', this)">🍽️ Masalar</button>`;
-      nav.innerHTML += `<button class="nav-btn" onclick="switchTab('mutfakTab', this)">👨‍🍳 Mutfak</button>`;
-      nav.innerHTML += `<button class="nav-btn" onclick="switchTab('kasaTab', this)">💰 Kasa</button>`;
-      nav.innerHTML += `<button class="nav-btn" onclick="switchTab('menuTab', this)">⚙️ Menü</button>`;
-      nav.innerHTML += `<button class="nav-btn logout-btn" onclick="handleLogout()">🚪 Çıkış</button>`;
+      nav.innerHTML = `
+        <button class="nav-btn active" onclick="switchTab('masalarTab', this)">🍽️ Masalar</button>
+        <button class="nav-btn" onclick="switchTab('mutfakTab', this)">👨‍🍳 Mutfak</button>
+        <button class="nav-btn" onclick="switchTab('kasaTab', this)">💰 Kasa</button>
+        <button class="nav-btn" onclick="switchTab('menuTab', this)">⚙️ Menü</button>
+        <button class="nav-btn logout-btn" onclick="handleLogout()">🚪 Çıkış</button>
+      `;
     }
 
     function switchTab(tabId, btn) {
@@ -257,14 +268,12 @@
       e.preventDefault();
       const u = document.getElementById('loginUsername').value.trim();
       const p = document.getElementById('loginPassword').value.trim();
-      const users = Object.values(cloudData.personnel);
-      const found = users.find(user => user.username === u && user.password === p);
-      if (found) {
-        activeUser = found;
+      if (u === "admin" && p === "123") {
+        activeUser = { name: "Yönetici" };
         renderNav();
         renderAll();
       } else {
-        alert("Hatalı Kullanıcı Adı veya Şifre!");
+        alert("Hatalı Kullanıcı Adı veya Şifre! (admin / 123 kullanın)");
       }
     }
 
@@ -273,15 +282,15 @@
     function renderTables() {
       const grid = document.getElementById('tablesGrid');
       grid.innerHTML = '';
-      Object.values(cloudData.tables).forEach(table => {
-        const order = cloudData.active_orders[table.id];
+      Object.values(cloudData.tables || {}).forEach(table => {
+        const order = cloudData.active_orders ? cloudData.active_orders[table.id] : null;
         const isOccupied = order && order.items && order.items.length > 0;
         let total = isOccupied ? order.items.reduce((s, i) => s + (i.price * i.count), 0) : 0;
 
         const pod = document.createElement('div');
         pod.className = `table-pod ${isOccupied ? 'occupied' : ''}`;
         pod.onclick = () => openOrderModal(table.id);
-        pod.innerHTML = `<strong>${table.name}</strong><small>${isOccupied ? 'Dolu' : 'Boş'}</small><div>${total > 0 ? total.toFixed(2) + ' TL' : ''}</div>`;
+        pod.innerHTML = `<strong>${table.name}</strong><small>${isOccupied ? '🔴 Dolu' : '🟢 Boş'}</small><div style="font-weight:700; color:var(--primary-dark);">${total > 0 ? total.toFixed(2) + ' TL' : ''}</div>`;
         grid.appendChild(pod);
       });
     }
@@ -290,8 +299,10 @@
       const name = document.getElementById('newTableName').value.trim();
       if (!name) return;
       const id = Date.now();
-      cloudDb.ref(`tables/${id}`).set({ id, name });
+      cloudData.tables[id] = { id, name };
+      saveToCloud(`tables/${id}`, { id, name });
       document.getElementById('newTableName').value = '';
+      renderTables();
     }
 
     function openOrderModal(tableId) {
@@ -307,25 +318,31 @@
     function renderModalMenu() {
       const grid = document.getElementById('modalMenuGrid');
       grid.innerHTML = '';
-      Object.values(cloudData.menu).forEach(item => {
+      Object.values(cloudData.menu || {}).forEach(item => {
         const btn = document.createElement('div');
-        btn.style.cssText = "background:#fff; border:1px solid #ccc; padding:8px; border-radius:8px; cursor:pointer;";
+        btn.style.cssText = "background:#fff; border:1px solid #cbd5e1; padding:8px; border-radius:8px; cursor:pointer; text-align:center;";
         btn.onclick = () => addItemToOrder(item);
-        btn.innerHTML = `<b>${item.name}</b><br><small>${item.price} TL</small>`;
+        btn.innerHTML = `<b>${item.name}</b><br><small style="color:var(--success); font-weight:700;">${item.price} TL</small>`;
         grid.appendChild(btn);
       });
     }
 
     function addItemToOrder(item) {
+      if (!cloudData.active_orders) cloudData.active_orders = {};
       let order = cloudData.active_orders[activeTableId] || { tableId: activeTableId, items: [] };
+      if (!order.items) order.items = [];
       const existing = order.items.find(i => i.id === item.id);
       if (existing) existing.count += 1;
       else order.items.push({ id: item.id, name: item.name, price: item.price, count: 1 });
-      cloudDb.ref(`active_orders/${activeTableId}`).set(order);
+      
+      cloudData.active_orders[activeTableId] = order;
+      saveToCloud(`active_orders/${activeTableId}`, order);
+      renderModalOrderList();
+      renderTables();
     }
 
     function renderModalOrderList() {
-      const order = cloudData.active_orders[activeTableId];
+      const order = cloudData.active_orders ? cloudData.active_orders[activeTableId] : null;
       const tbody = document.getElementById('modalOrderTableBody');
       tbody.innerHTML = '';
       let total = 0;
@@ -338,58 +355,10 @@
       document.getElementById('modalTotalAmount').innerText = total.toFixed(2);
     }
 
-    function sendOrderToKitchen() { closeOrderModal(); }
-
     function renderKitchen() {
       const grid = document.getElementById('kitchenGrid');
       grid.innerHTML = '';
-      Object.values(cloudData.active_orders).forEach(order => {
-        const table = cloudData.tables[order.tableId];
+      Object.values(cloudData.active_orders || {}).forEach(order => {
+        const table = cloudData.tables ? cloudData.tables[order.tableId] : null;
         if (!table || !order.items || order.items.length === 0) return;
-        grid.innerHTML += `<div class="kitchen-card"><h3>${table.name}</h3><div>${order.items.map(i => `<div><b>${i.count}x</b>${i.name}</div>`).join('')}</div></div>`;
-      });
-    }
-
-    function renderCashier() {
-      const tbody = document.getElementById('cashierTableBody');
-      tbody.innerHTML = '';
-      let rev = 0;
-      Object.values(cloudData.active_orders).forEach(order => {
-        const table = cloudData.tables[order.tableId];
-        if (!table || !order.items || order.items.length === 0) return;
-        const total = order.items.reduce((s, i) => s + (i.price * i.count), 0);
-        tbody.innerHTML += `<tr><td>${table.name}</td><td>${total.toFixed(2)} TL</td><td><button class="btn btn-success" onclick="closeAccount(${table.id})">Tahsil Et</button></td></tr>`;
-      });
-      Object.values(cloudData.sales).forEach(s => rev += s.totalAmount);
-      document.getElementById('dailyRevenue').innerText = rev.toFixed(2) + ' TL';
-    }
-
-    function closeAccount(tableId) {
-      const order = cloudData.active_orders[tableId];
-      if (!order) return;
-      const total = order.items.reduce((s, i) => s + (i.price * i.count), 0);
-      cloudDb.ref(`sales/${Date.now()}`).set({ totalAmount: total, timestamp: Date.now() });
-      cloudDb.ref(`active_orders/${tableId}`).remove();
-    }
-
-    function renderMenu() {
-      const tbody = document.getElementById('menuTableBody');
-      tbody.innerHTML = '';
-      Object.values(cloudData.menu).forEach(item => {
-        tbody.innerHTML += `<tr><td>${item.name}</td><td>${item.price} TL</td></tr>`;
-      });
-    }
-
-    function saveMenuItem(e) {
-      e.preventDefault();
-      const name = document.getElementById('menuItemName').value;
-      const price = parseFloat(document.getElementById('menuItemPrice').value);
-      const id = Date.now();
-      cloudDb.ref(`menu/${id}`).set({ id, name, price });
-      e.target.reset();
-    }
-
-    window.onload = () => startCloudListeners();
-  </script>
-</body>
-</html>
+        grid.innerHTML += `<div class="kitchen-card"><h3>${table.name}</h3><hr style="margin:8px 0; border:none; border-top:1px dashed #ccc;"><div>${order.items.map(i => `<div><b>
